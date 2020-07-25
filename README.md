@@ -117,4 +117,139 @@ Vale lembrar que o repositório local fica disponível na pasta do usuário, e p
 
 Quando tratamos do Maven, a execução de um passo depende da execução dos passos anteriores, a não ser que sejam definidos parâmetros, e.g: -DskipTests=true.
 
-## Incluindo plugins
+Por exemplo:
+
+```
+mvn verify irá executar todas as fases anteriores antes de ser executada.
+```
+
+## Gerando relatórios e testando projeto utilizando PMD
+
+O arquivo é gerado dentro do diretório target/site.
+Consultar documentação para ver todas as formas de uso do PMD.
+
+```
+mvn pmd:pmd
+```
+
+Para validar o projeto, você pode utilizar o comando:
+
+```
+mvn pmd:check
+```
+
+Dessa forma você faz a validação padrão do PMD, para personalizá-las utilize a documentação como auxílio.
+
+## pom.xml
+
+É o principal arquivo de configuração de projetos Maven, por ele você pode gerenciar todo o ciclo de vida do projeto.
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <!-- Versão do arquivo XML-->
+	<modelVersion>4.0.0</modelVersion>
+        <!-- Caminho inteiro do projeto-->
+	<groupId>br.com.rafael.maven</groupId>
+        <!-- Nome artifactId-->
+	<artifactId>produtos</artifactId>
+        <!-- Formato que o projeto será empacotado -->
+	<packaging>jar</packaging>
+        <!-- Versão do projeto -->
+	<version>1.0-SNAPSHOT</version>
+        <!-- Nome "bonitinho" para o projeto -->
+	<name>produtos</name>
+        <!-- Site do seu projeto -->
+	<url>http://maven.apache.org</url>
+	<dependencies>
+                <!-- Dependência (Informações podem ser buscadas no mvn repository)-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+        </dependencies>
+</project>
+```
+
+## Automatizando um comandos e plugins
+
+Iremos configurar para que sempre que o comando mvn verify seja executado, por trás dos panos ele utilize a ferramenta PMD para verificar erros no projeto e gerar um relatório.
+
+O goal check trava o build caso um problema esperado aconteça. O goal pmd gera o relatório no diretório target/site.
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <!-- Versão do arquivo XML-->
+	<modelVersion>4.0.0</modelVersion>
+        <!-- Caminho inteiro do projeto-->
+	<groupId>br.com.rafael.maven</groupId>
+        <!-- Nome artifactId-->
+	<artifactId>produtos</artifactId>
+        <!-- Formato que o projeto será empacotado -->
+	<packaging>jar</packaging>
+        <!-- Versão do projeto -->
+	<version>1.0-SNAPSHOT</version>
+        <!-- Nome "bonitinho" para o projeto -->
+	<name>produtos</name>
+        <!-- Site do seu projeto -->
+	<url>http://maven.apache.org</url>
+	<dependencies>
+                <!-- Dependência (Informações podem ser buscadas no mvn repository)-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+        </dependencies>
+
+        <!-- Especifica a fase de build -->
+        <build>            
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.13.0</version>
+                    <!-- Especificações de coisas a serem executadas -->
+                    <executions>
+                        <execution>
+                            <!-- Quando será executado -->
+                            <phase>verify</phase>
+                            <!-- Comandos do plugin -->
+                            <goals>
+                                <goal>check</goal>
+                                <goal>pmd</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.6-SNAPSHOT</version>
+                        <executions>
+                                <execution>
+                                        <goals>
+                                                <goal>prepare-agent</goal>
+                                                <goal>report</goal>
+                                        </goals>
+                                </execution>
+                        </executions>
+                </plugin>
+            </plugins>
+        </build>
+</project>
+```
+
+## Utilizando plugin JaCoCo para verificar a cobertura de testes
+
+Executar o comando com cmd aberto no diretório do projeto.
+
+```
+mvn jacoco:help
+```
