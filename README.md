@@ -378,3 +378,60 @@ public class ContatoServlet extends HttpServlet {
 	}
 }
 ```
+
+## Geração do compilado do projeto web .war
+
+Rodar o seguinte comando com o cmd aberto no diretório do projeto: 
+
+```
+mvn package
+```
+
+## Tipos de Escopo de Dependência
+
+Há cinco tipos de escopo: **compile, runtime, test, provided e system**.
+
+
+**compile**: Se nenhum escopo for especificado para uma dependência, compile é o padrão. Se uma dependência tem o escopo compile, ela será incluída em todos os classpaths do projeto. Transitivo
+
+**runtime**: Uma dependência com o escopo runtime é necessária na execução e nos testes, mas não na compilação das classes. Por consequência, a dependência é incluída nos classpaths dessas duas fases. Transitivo
+
+**test**: O escopo test deve ser especificado nas dependências que são utilizadas nas classes de teste. Nos tutoriais anteriores, quando criamos projetos com o archetype Quickstart, o JUnit já era incluído com esse escopo. Uma dependência com o escopo test é incluída na compilação e execução dos testes. Não-Transitivo
+
+**provided**: Se uma dependência tem o escopo provided, assume-se que ela será fornecida pelo ambiente de execução onde o projeto será compilado e executado. Por exemplo, a Servlet API geralmente deve ser declarada com o escopo provided, pois o Web Container contém e utiliza o arquivo JAR da API na compilação e tempo de execução. Não-Transitivo
+
+**system**: O escopo system é similar ao provided, a diferença é que o caminho do artefato deve ser especificado na declaração da dependência(através da tag systemPath). Devido a isso, perceba que, ao menos em um ambiente totalmente controlado, esse escopo pode levar a sérios problemas de portabilidade. Não-Transitivo
+
+A partir da versão 2.0.9 do Maven, um tipo de escopo especial foi incluído: o **import**. O escopo import é utilizado especificamente no gerenciamento de dependências em projetos com muitos módulos, com o intuito de evitar declarações da mesma dependência espalhadas nos vários arquivos POM do projeto. Como a explicação desse escopo requer alguns exemplos para ficar mais clara, deixaremos esse assunto para outro post.
+
+## Utilizando dependências de projetos pessoais
+
+Você pode adicionar uma dependência de um projeto existente em sua máquina da mesma forma que utiliza as da internet.
+
+e.g:
+
+```xml
+<dependency>
+        <groupId>br.com.rafael.projeto</groupId>
+        <artifactId>loja</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+<dependency>
+```
+
+Se o projeto adicionado como dependência estiver na mesma workspace do Eclipce, nas dependências do Maven será referenciado o seu projeto em si e não o .jar do mesmo. Para que seja compilado e executado com sucesso, é necessário ir até o projeto que é dependente e instalar o .jar em seu diretório local com o comando:
+
+```
+mvn install
+```
+
+Se o projeto adicionado como dependência estiver na mesma workspace do Eclipce, nas dependências do Maven será referenciado o .jar do projeto.
+
+---
+## Referências:
+
+#### Conteúdo de estudo:
+Cursos da Alura.
+
+#### Tipos de dependências: 
+Anderson Gomes - [Maven] Tipos de Escopo de Dependência
+https://medium.com/@andgomes/tipos-de-escopo-de-depend%C3%AAncia-4ef1168ee5dd
