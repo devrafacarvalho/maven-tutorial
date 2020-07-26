@@ -387,6 +387,12 @@ Rodar o seguinte comando com o cmd aberto no diretório do projeto:
 mvn package
 ```
 
+É boa prática dar um clean antes do package para garantir a não existência de algo indesejado:
+
+```
+mvn clean package
+```
+
 ## Tipos de Escopo de Dependência
 
 Há cinco tipos de escopo: **compile, runtime, test, provided e system**.
