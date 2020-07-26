@@ -253,3 +253,128 @@ Executar o comando com cmd aberto no diretório do projeto.
 ```
 mvn jacoco:help
 ```
+
+Configurar para rodar o JaCoCo ao executar mvn verify, arquivo também é gerado no diretório targer/site:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <!-- Versão do arquivo XML-->
+	<modelVersion>4.0.0</modelVersion>
+        <!-- Caminho inteiro do projeto-->
+	<groupId>br.com.rafael.maven</groupId>
+        <!-- Nome artifactId-->
+	<artifactId>produtos</artifactId>
+        <!-- Formato que o projeto será empacotado -->
+	<packaging>jar</packaging>
+        <!-- Versão do projeto -->
+	<version>1.0-SNAPSHOT</version>
+        <!-- Nome "bonitinho" para o projeto -->
+	<name>produtos</name>
+        <!-- Site do seu projeto -->
+	<url>http://maven.apache.org</url>
+	<dependencies>
+                <!-- Dependência (Informações podem ser buscadas no mvn repository)-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+        </dependencies>
+
+        <!-- Especifica a fase de build -->
+        <build>            
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.13.0</version>
+                    <!-- Especificações de coisas a serem executadas -->
+                    <executions>
+                        <execution>
+                            <!-- Quando será executado -->
+                            <phase>verify</phase>
+                            <!-- Comandos do plugin -->
+                            <goals>
+                                <goal>check</goal>
+                                <goal>pmd</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.6-SNAPSHOT</version>
+                        <executions>
+                                <execution>
+                                        <goals>
+                                                <goal>prepare-agent</goal>
+                                                <goal>report</goal>
+                                        </goals>
+                                </execution>
+                        </executions>
+                </plugin>
+            </plugins>
+        </build>
+</project>
+```
+
+## Criando projeto Web
+
+Para criar projeto Web.
+
+1. Criar projeto Maven utilizando archetype de projeto Web maven-archetype-webapp.
+2. Adicionar plugin Java Servlet API:
+```xml
+<dependency>
+	<groupId>javax.servlet</groupId>
+	<artifactId>javax.servlet-api</artifactId>
+	<version>3.1.0</version>
+	<scope>provided</scope>
+</dependency>
+```
+3. Atualizar a versão no web.xml (Pesquisar na internet)
+4. Alterar versão do maven compiler no seu pom.xml pra sua versão java:
+```xml
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+```
+5. Projeto > Propriedades > Project Facets > "Conferir versão do Java".
+6. Adicionar plugin maven para adicionar um servidor para rodar a aplicação, no caso de usar o Jetty:
+6.1. Executar o comando: **mvn jetty:run**
+
+Observação: para parar o Jetty você pode executar **CRTL+C**.
+
+## Adição de nova página via classe HttpServlet:
+
+```java
+package src.main.java;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(urlPatterns = "/contato")
+public class ContatoServlet extends HttpServlet {
+	private static final long serialVersionUID = 1755493798575605972L;
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("text/html");
+		PrintWriter writer = resp.getWriter();
+		writer.println("<html><h2>Contato!</h2></html>");
+		writer.close();
+	}
+}
+```
