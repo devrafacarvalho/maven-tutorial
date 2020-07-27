@@ -14,14 +14,14 @@ Principais funções notadas:
 ## Instalando Maven
 
 Para instalar o Maven, basta fazer o download no site e descompactá-lo na sua pasta de preferência.
-Após isso adicione-o em suas varíavels do sistema.
+Após isso adicione-o em suas varíaveis do sistema.
 
 ## Testando instalação do Maven
 
 Executar no cmd:
 
 ```
-maven --version
+mvn --version
 ```
 
 ## Gerando projeto utilizando maven
@@ -32,11 +32,16 @@ Executar no cmd:
 mvn archetype:generate -DartifactId=produtos -DgroupId=br.com.alura.maven -DinteractiveMode=false -DarchetypeArtfactId=maven-archetype-quickstart
 ```
 
-**mvn**: Chama o maven, por trás dos panos chama utilizando a variável de ambiente.
-**archetype:generete**: utilizado para geração de um novo projeto.
+**mvn**: chama o maven e, por trás dos panos utiliza a variável de ambiente.
+
+**archetype:generate**: chama a ferramenta do maven chamada Archetype passando o comando generate para criação de um novo projeto.
+
 **-DartifactId**: nome do projeto.
+
 **-DgroupId**: pacote inteiro onde ficará o projeto.
-**-DinteractiveMode**: se será utilizado o movo interativo do Maven ou não, caso não, ele aceitará as configurações da forma que estão sendo passadas e não irá perguntar mais nada.
+
+**-DinteractiveMode**: se será utilizado o modo interativo do Maven ou não, caso não, ele aceitará as configurações da forma que estão sendo passadas e não irá perguntar mais nada.
+
 **-DarchetypeArtfactId**: aqui você diz qual padrão de projeto será utilizado para a geração do seu. e.x: projetos Web, projetos Spring, etc.
 Neste caso foi gerado baseado em um projeto quickstart.
 
@@ -47,6 +52,8 @@ Você precisa estar com o cmd dentro da pasta do projeto e executar o comando:
 ```
 mvn compile
 ```
+
+O comando *compile* realiza o build do projeto.
 
 ## Executar classe de teste
 
@@ -72,12 +79,20 @@ Você utiliza um plugin para geração dos retalórios de teste. Neste caso o no
 mvn surefire-report:report
 ```
 
+Os arquivos são gerados no diretório target/site.
+
 ## Empacotar em um arquivo .jar
 
 Para gerar um arquivo .jar do projeto, execute o seguinte comando no cmd.
 
 ```
 mvn package
+```
+
+É boa prática executar o comando clean junto:
+
+```
+mvn clean package
 ```
 
 ## Repositório local e remoto
@@ -99,21 +114,21 @@ Vale lembrar que o repositório local fica disponível na pasta do usuário, e p
 
 ## As fases do Maven
 
-1. Validação: verificamos se projeto possui todas as informações necessárias
+1. Validação: verificamos se projeto possui todas as informações necessárias.
 
-2. Compilação: compilar os conteúdos
+2. Compilação: compilar os conteúdos.
 
-3. Teste: realizar testes diferentes no projeto
+3. Teste: realizar testes diferentes no projeto.
 
-4. Pacote: geração de um pacote do projeto
+4. Pacote: geração de um pacote do projeto.
 
-5. Teste de integração: realizar testes de integração
+5. Teste de integração: realizar testes de integração.
 
-6. Verificação: checagem do pacote gerado
+6. Verificação: checagem do pacote gerado.
 
-7. Instalação: realizar a instalação do pacote no repositório local
+7. Instalação: realizar a instalação do pacote no repositório local.
 
-8. Implantação: realizar a implantação no ambiente adequado
+8. Implantação: realizar a implantação no ambiente adequado.
 
 Quando tratamos do Maven, a execução de um passo depende da execução dos passos anteriores, a não ser que sejam definidos parâmetros, e.g: -DskipTests=true.
 
@@ -402,13 +417,13 @@ Há cinco tipos de escopo: **compile, runtime, test, provided e system**.
 
 **runtime**: Uma dependência com o escopo runtime é necessária na execução e nos testes, mas não na compilação das classes. Por consequência, a dependência é incluída nos classpaths dessas duas fases. Transitivo
 
-**test**: O escopo test deve ser especificado nas dependências que são utilizadas nas classes de teste. Nos tutoriais anteriores, quando criamos projetos com o archetype Quickstart, o JUnit já era incluído com esse escopo. Uma dependência com o escopo test é incluída na compilação e execução dos testes. Não-Transitivo
+**test**: O escopo test deve ser especificado nas dependências que são utilizadas nas classes de teste. Por exemplo no JUnit. Uma dependência com o escopo test é incluída na compilação e execução dos testes. Não-Transitivo
 
 **provided**: Se uma dependência tem o escopo provided, assume-se que ela será fornecida pelo ambiente de execução onde o projeto será compilado e executado. Por exemplo, a Servlet API geralmente deve ser declarada com o escopo provided, pois o Web Container contém e utiliza o arquivo JAR da API na compilação e tempo de execução. Não-Transitivo
 
 **system**: O escopo system é similar ao provided, a diferença é que o caminho do artefato deve ser especificado na declaração da dependência(através da tag systemPath). Devido a isso, perceba que, ao menos em um ambiente totalmente controlado, esse escopo pode levar a sérios problemas de portabilidade. Não-Transitivo
 
-A partir da versão 2.0.9 do Maven, um tipo de escopo especial foi incluído: o **import**. O escopo import é utilizado especificamente no gerenciamento de dependências em projetos com muitos módulos, com o intuito de evitar declarações da mesma dependência espalhadas nos vários arquivos POM do projeto. Como a explicação desse escopo requer alguns exemplos para ficar mais clara, deixaremos esse assunto para outro post.
+A partir da versão 2.0.9 do Maven, um tipo de escopo especial foi incluído: o **import**. O escopo import é utilizado especificamente no gerenciamento de dependências em projetos com muitos módulos, com o intuito de evitar declarações da mesma dependência espalhadas nos vários arquivos POM do projeto.
 
 ## Utilizando dependências de projetos pessoais
 
@@ -440,4 +455,5 @@ Cursos da Alura.
 
 #### Tipos de dependências: 
 Anderson Gomes - [Maven] Tipos de Escopo de Dependência
+
 https://medium.com/@andgomes/tipos-de-escopo-de-depend%C3%AAncia-4ef1168ee5dd
